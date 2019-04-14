@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailSendApi", "MailSendApi\MailSendApi.csproj", "{A19920F1-F299-4BA1-ADDC-EE480D5A7646}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailSender", "MailSender\MailSender.csproj", "{B8D80C62-A527-4E54-A999-65B42FDED569}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A19920F1-F299-4BA1-ADDC-EE480D5A7646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A19920F1-F299-4BA1-ADDC-EE480D5A7646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A19920F1-F299-4BA1-ADDC-EE480D5A7646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8D80C62-A527-4E54-A999-65B42FDED569}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8D80C62-A527-4E54-A999-65B42FDED569}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8D80C62-A527-4E54-A999-65B42FDED569}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8D80C62-A527-4E54-A999-65B42FDED569}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

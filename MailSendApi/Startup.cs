@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MailSendApi.Helpers;
+using MailSenderApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -14,17 +18,26 @@ namespace MailSendApi
 {
     public class Startup
     {
+        private readonly IConfiguration configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+            this.configuration = configuration;
+            //StaticValues.smtp = configuration.
+            //StaticValues.UseDefaultCredentials { get; set; }
+            //StaticValues.Credentials { get; set; }
+            //StaticValues.Password { get; set; }
+            //StaticValues.EnableSsl { get; set; }
+            //StaticValues.Port { get; set; }
+    }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDbContext<MailContext>(o => o.UseSqlite(configuration.GetConnectionString("SQLiteConnection")));
+            services
+                .AddMvcCore()
+                .AddDataAnnotations()
+                .AddJsonFormatters()
+                .AddJsonOptions(o => o.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,8 +47,17 @@ namespace MailSendApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseHsts();
+            }
 
             app.UseMvc();
+
+            app.Run(async (context) =>
+            {
+                await context.Response.WriteAsync("Nie znaleziono API.");
+            });
         }
     }
 }
