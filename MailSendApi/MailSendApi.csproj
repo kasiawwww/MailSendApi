@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="2.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.1.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Sendgrid" Version="9.10.0" />
   </ItemGroup>
 
   <ItemGroup>

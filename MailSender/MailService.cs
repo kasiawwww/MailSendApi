@@ -1,4 +1,6 @@
-﻿using MailService;
+﻿
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +15,23 @@ namespace MailSender
     {
         //static Logger.Info infoLogger = new Logger.Info();
        // static Logger.Error errorLogger = new Logger.Error();
-        public static bool Send(MailModel model)
+        public static async Task<bool> SendAsync(MailModel model, SendGridClient client)
         {
             try
             {
-                //infoLogger.Log("Próba wysłania maila");
-                var message = new MailMessage();
-                message.From = new MailAddress(model.MailFrom, model.MailFrom);
-                model.MailTo.ForEach(m => message.To.Add(new MailAddress(m)));
-                message.Subject = model.Title;
-                message.Body = model.Body;
-                var smtp = new SmtpClient(AppSettings.Get<string>("smtp"))
+                var message = new SendGridMessage();
+                message.SetFrom(new EmailAddress(model.MailFrom));
+
+                var recipients = new List<EmailAddress>();
+                foreach (var item in model.MailTo)
                 {
-                    UseDefaultCredentials = AppSettings.Get<bool>("UseDefaultCredentials"), //To do App.config
-                    Credentials = new NetworkCredential(AppSettings.Get<string>("Credentials"), AppSettings.Get<string>("Password")), //To do App.config
-                    EnableSsl = AppSettings.Get<bool>("EnableSsl"), //To do App.config
-                    Port = AppSettings.Get<int>("Port") //To do App.config
-                }; //To do App.config
-                smtp.Send(message);
+                    recipients.Add(new EmailAddress(item));
+                }
+                message.AddTos(recipients);
+                message.SetSubject(model.Title);
+                message.AddContent(MimeType.Text, model.Body);
+
+                var response = await client.SendEmailAsync(message);
                 return true;
             }
             catch (SmtpException smtpEx)

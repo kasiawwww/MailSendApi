@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MailSendApi.Helpers;
 using MailSenderApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,12 +22,6 @@ namespace MailSendApi
         public Startup(IConfiguration configuration)
         {
             this.configuration = configuration;
-            //StaticValues.smtp = configuration.
-            //StaticValues.UseDefaultCredentials { get; set; }
-            //StaticValues.Credentials { get; set; }
-            //StaticValues.Password { get; set; }
-            //StaticValues.EnableSsl { get; set; }
-            //StaticValues.Port { get; set; }
     }
         public void ConfigureServices(IServiceCollection services)
         {

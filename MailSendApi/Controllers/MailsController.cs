@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using MailSenderApi.Models;
 using MailSender;
 using System.Net.Mail;
+using SendGrid;
+using Microsoft.Extensions.Configuration;
 
 namespace MailSendApi.Controllers
 {
@@ -16,10 +18,13 @@ namespace MailSendApi.Controllers
     public class MailsController : ControllerBase
     {
         private readonly MailContext db;
+        private readonly IConfiguration configuration;
 
-        public MailsController(MailContext db)
+        public MailsController(MailContext db, IConfiguration configuration)
         {
             this.db = db;
+            this.configuration = configuration;
+
         }
         // GET api/values
         [HttpGet]
@@ -57,13 +62,16 @@ namespace MailSendApi.Controllers
 
         // POST api/values
         [HttpPost]
-        public IActionResult AddMails(Mail mail)
+        public async Task<IActionResult> AddMailsAsync(Mail mail)
         {
             string message = string.Empty;
             try
             {
                 if (ModelState.IsValid)
                 {
+                    var apiKey = configuration.GetSection("SENDGRID_API_KEY").Value;
+                    var client = new SendGridClient(apiKey);
+
                     MailModel model = new MailModel();
                     model.MailFrom = mail.From; 
                     message = model.SetMailTo(mail.To);
@@ -74,7 +82,7 @@ namespace MailSendApi.Controllers
                     model.Title = mail.Title;
                     model.Body = mail.Body;
 
-                    MailService.Send(model);
+                    await MailService.SendAsync(model, client);
                     db.Mails.Add(mail);
                     db.SaveChanges();
                     return CreatedAtAction(nameof(GetMails), new { id = mail.Id }, mail);
